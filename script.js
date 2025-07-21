@@ -1,57 +1,30 @@
-// Your code here.
-<script>
-  const itemsContainer = document.querySelector('.items');
-  const items = document.querySelectorAll('.item');
+const items = document.querySelector('.items');
 
-  let activeItem = null;
-  let offsetX = 0;
-  let offsetY = 0;
+let isDown = false;
+let startX;
+let scrollLeft;
 
-  items.forEach(item => {
-    item.style.position = 'absolute'; // Set position absolute for movement
-    item.style.cursor = 'grab';
+items.addEventListener('mousedown', (e) => {
+  isDown = true;
+  items.classList.add('active');
+  startX = e.pageX - items.offsetLeft;
+  scrollLeft = items.scrollLeft;
+});
 
-    // Position each item in a grid layout initially
-    const index = [...items].indexOf(item);
-    const col = index % 5;
-    const row = Math.floor(index / 5);
-    item.style.left = `${col * 80}px`;
-    item.style.top = `${row * 80}px`;
+items.addEventListener('mouseleave', () => {
+  isDown = false;
+  items.classList.remove('active');
+});
 
-    // Mouse down starts the drag
-    item.addEventListener('mousedown', (e) => {
-      activeItem = item;
-      offsetX = e.clientX - item.offsetLeft;
-      offsetY = e.clientY - item.offsetTop;
-      item.style.zIndex = 1000;
-      item.style.cursor = 'grabbing';
-    });
-  });
+items.addEventListener('mouseup', () => {
+  isDown = false;
+  items.classList.remove('active');
+});
 
-  // Mouse move updates the position
-  document.addEventListener('mousemove', (e) => {
-    if (!activeItem) return;
-
-    const containerRect = itemsContainer.getBoundingClientRect();
-    const itemRect = activeItem.getBoundingClientRect();
-
-    let newLeft = e.clientX - offsetX - containerRect.left;
-    let newTop = e.clientY - offsetY - containerRect.top;
-
-    // Apply boundary constraints
-    newLeft = Math.max(0, Math.min(newLeft, containerRect.width - itemRect.width));
-    newTop = Math.max(0, Math.min(newTop, containerRect.height - itemRect.height));
-
-    activeItem.style.left = `${newLeft}px`;
-    activeItem.style.top = `${newTop}px`;
-  });
-
-  // Mouse up releases the cube
-  document.addEventListener('mouseup', () => {
-    if (activeItem) {
-      activeItem.style.zIndex = '';
-      activeItem.style.cursor = 'grab';
-      activeItem = null;
-    }
-  });
-</script>
+items.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - items.offsetLeft;
+  const walk = (x - startX) * 2; // *2 = scroll speed multiplier
+  items.scrollLeft = scrollLeft - walk;
+});
