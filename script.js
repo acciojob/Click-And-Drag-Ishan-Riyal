@@ -4,7 +4,7 @@ let isDown = false;
 let startX;
 let scrollLeft;
 
-// When mouse is pressed down
+// Start drag
 items.addEventListener('mousedown', (e) => {
   isDown = true;
   items.classList.add('active');
@@ -12,23 +12,22 @@ items.addEventListener('mousedown', (e) => {
   scrollLeft = items.scrollLeft;
 });
 
-// When mouse leaves the container
-items.addEventListener('mouseleave', () => {
-  isDown = false;
-  items.classList.remove('active');
-});
-
-// When mouse is released
+// End drag
 items.addEventListener('mouseup', () => {
   isDown = false;
   items.classList.remove('active');
 });
 
-// While dragging the mouse
+items.addEventListener('mouseleave', () => {
+  isDown = false;
+  items.classList.remove('active');
+});
+
+// While dragging
 items.addEventListener('mousemove', (e) => {
   if (!isDown) return;
   e.preventDefault();
   const x = e.pageX - items.offsetLeft;
-  const walk = (x - startX) * 2; // Multiply for faster scroll
+  const walk = (x - startX) * 2;
   items.scrollLeft = scrollLeft - walk;
 });

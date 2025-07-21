@@ -1,4 +1,3 @@
-/* Base styles */
 html {
   box-sizing: border-box;
   background: url('https://source.unsplash.com/NFs6dRTBgaM/2000x2000') fixed;
@@ -19,7 +18,6 @@ body {
   font-family: sans-serif;
 }
 
-/* Scrollable container */
 .items {
   width: 90%;
   max-width: 1200px;
@@ -32,15 +30,14 @@ body {
   white-space: nowrap;
   cursor: grab;
   transition: background 0.2s ease;
+  scroll-behavior: smooth;
 }
 
-/* While dragging */
 .items.active {
   cursor: grabbing;
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Items (cards) */
 .item {
   display: inline-flex;
   justify-content: center;
@@ -55,7 +52,6 @@ body {
   user-select: none;
 }
 
-/* Color variation */
 .item:nth-child(9n+1) { background: dodgerblue; }
 .item:nth-child(9n+2) { background: goldenrod; }
 .item:nth-child(9n+3) { background: paleturquoise; }
